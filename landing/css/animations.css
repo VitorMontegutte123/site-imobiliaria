@@ -1,0 +1,94 @@
+/* ==========================================================================
+   GV IMÓVEIS — Animations & motion utilities
+   Baseline (CSS) states for reveal elements; GSAP drives the timeline.
+   The .no-js fallback guarantees content is visible without JavaScript.
+   ========================================================================== */
+
+/* ---- Reveal baselines ---- */
+.reveal-up{
+  opacity: 0;
+  transform: translateY(36px);
+}
+.reveal-fade{
+  opacity: 0;
+}
+.reveal-image{
+  opacity: 0;
+  transform: scale(1.06);
+  clip-path: inset(0% 0% 0% 0%);
+}
+.js .reveal-up,
+.js .reveal-fade,
+.js .reveal-image{
+  transition: none; /* GSAP owns the transition once JS is active */
+}
+
+.no-js .reveal-up,
+.no-js .reveal-fade,
+.no-js .reveal-image{
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* ---- Hero keyframes ---- */
+@keyframes heroZoom{
+  from{ transform: scale(1.0); }
+  to{ transform: scale(1.14); }
+}
+
+@keyframes scrollDrop{
+  0%{ top: -50%; }
+  100%{ top: 100%; }
+}
+
+/* ---- Preloader ---- */
+.preloader-mark{
+  opacity: 0;
+  animation: preloaderFade 1.4s var(--ease-soft) forwards;
+}
+@keyframes preloaderFade{
+  0%{ opacity: 0; letter-spacing: 0.9em; }
+  100%{ opacity: 1; letter-spacing: 0.5em; }
+}
+.preloader{
+  transition: opacity .8s var(--ease-soft), visibility .8s var(--ease-soft);
+  /* Safety net: force-hide even if a script error prevents app.js from running. */
+  animation: preloaderForceHide 0.01s linear 4s forwards;
+}
+.preloader.is-hidden{ opacity: 0; visibility: hidden; pointer-events: none; }
+.no-js .preloader{ display: none; }
+@keyframes preloaderForceHide{ to{ opacity: 0; visibility: hidden; } }
+
+/* ---- Glass card 3D tilt ---- */
+.glass-card{ transition: background .4s var(--ease), transform .4s var(--ease-soft), box-shadow .4s var(--ease-soft); }
+.glass-card:hover{
+  box-shadow: 0 24px 48px -20px rgba(0,0,0,0.5);
+}
+
+/* ---- Buttons breathing (idle) ---- */
+.btn-gold{
+  animation: breathe 5s ease-in-out infinite;
+}
+@keyframes breathe{
+  0%, 100%{ box-shadow: 0 0 0 0 rgba(212,165,116,0); }
+  50%{ box-shadow: 0 0 26px 2px rgba(212,165,116,0.18); }
+}
+
+/* ---- Split-type line reveal ---- */
+.split-line{
+  overflow: hidden;
+  display: block;
+}
+
+/* ---- Cursor hover states are toggled via JS (is-active class in style.css) ---- */
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .hero-img{ animation: none; transform: scale(1); }
+}

@@ -1,0 +1,49 @@
+/* ==========================================================================
+   GV IMÓVEIS — Responsive rules
+   Desktop-first tokens already fluid via clamp(); breakpoints refine layout.
+   ========================================================================== */
+
+/* ---- Tablet / small desktop ---- */
+@media (max-width: 1024px){
+  .concept{ grid-template-columns: 1fr; }
+  .concept-media{ aspect-ratio: 16/10; order: -1; }
+  .glass-grid{ grid-template-columns: repeat(2, 1fr); }
+  .navbar-nav{ gap: 26px; margin-left: 36px; }
+}
+
+/* ---- Mobile ---- */
+@media (max-width: 760px){
+  .navbar-nav,
+  .navbar-cta{ display: none; }
+  .navbar-burger{
+    display: flex; flex-direction: column; justify-content: center; gap: 5px;
+    width: 34px; height: 34px;
+  }
+  .navbar-burger span{
+    display: block; width: 100%; height: 1px; background: var(--white); transition: transform .3s, opacity .3s;
+  }
+  .navbar-burger[aria-expanded="true"] span:first-child{ transform: translateY(3px) rotate(45deg); }
+  .navbar-burger[aria-expanded="true"] span:last-child{ transform: translateY(-3px) rotate(-45deg); }
+
+  .hero-title{ font-size: clamp(44px, 14vw, 64px); white-space: normal; }
+  .hero-desc{ font-size: 14px; }
+
+  main > section{ padding-left: 22px; padding-right: 22px; }
+
+  .glass-grid{ grid-template-columns: 1fr; }
+  .glass-card{ padding: 34px 26px; }
+
+  .gallery-swiper .swiper-slide{ aspect-ratio: 4/5; }
+  .gallery-caption{ left: 20px; bottom: 18px; }
+
+  .footer-inner{ flex-direction: column; align-items: flex-start; }
+
+  .cursor{ display: none; }
+  body{ cursor: auto; }
+}
+
+/* ---- Small mobile ---- */
+@media (max-width: 420px){
+  .btn{ padding: 15px 30px; font-size: 11.5px; }
+  h2{ font-size: clamp(26px, 8vw, 36px); }
+}
