@@ -202,7 +202,8 @@ body{font-family:'Inter',sans-serif;background:var(--navy);color:var(--white);-w
   background:rgba(255,255,255,0.03);border:1px solid rgba(201,169,110,0.2);
   border-radius:8px;padding:36px 32px;margin-bottom:40px;text-align:left;
 }
-.simulator-title{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:24px;text-align:center}
+.simulator-title{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;text-align:center}
+.sim-intro{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.7;text-align:center;max-width:520px;margin:0 auto 30px}
 .sim-row{margin-bottom:26px}
 .sim-row-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
 .sim-row-head label{font-size:13px;color:rgba(255,255,255,0.6)}
@@ -221,9 +222,40 @@ input[type="range"]::-moz-range-thumb{
   width:20px;height:20px;border-radius:50%;background:var(--gold);cursor:pointer;
   border:3px solid var(--navy);box-shadow:0 0 0 1px var(--gold);
 }
+.sim-inputs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-bottom:6px}
+.sim-input-item{text-align:center}
+.sim-input-item label{display:block;font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:8px}
+.sim-input-wrap{
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  background:rgba(255,255,255,0.05);border:1px solid rgba(201,169,110,0.25);
+  border-radius:4px;padding:10px 12px;transition:border-color 0.2s;
+}
+.sim-input-wrap:focus-within{border-color:var(--gold)}
+.sim-input-wrap input{
+  width:100%;background:none;border:none;outline:none;color:var(--white);
+  font-family:'Playfair Display',serif;font-size:20px;font-weight:700;text-align:center;
+  -moz-appearance:textfield;
+}
+.sim-input-wrap input::-webkit-outer-spin-button,.sim-input-wrap input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.sim-input-wrap span{color:rgba(255,255,255,0.4);font-size:14px}
+.sim-input-hint{display:block;font-size:10px;color:rgba(255,255,255,0.3);margin-top:6px}
+
+.sim-status{
+  display:flex;align-items:center;justify-content:center;gap:10px;text-align:left;
+  border-radius:6px;padding:14px 20px;margin:26px 0 6px;font-size:13px;font-weight:600;
+  border:1px solid transparent;transition:background 0.3s,border-color 0.3s,color 0.3s;
+}
+.sim-status .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.sim-status.approved{background:rgba(34,197,94,0.12);border-color:rgba(34,197,94,0.35);color:var(--green)}
+.sim-status.approved .dot{background:var(--green)}
+.sim-status.analysis{background:rgba(245,158,11,0.12);border-color:rgba(245,158,11,0.35);color:#F59E0B}
+.sim-status.analysis .dot{background:#F59E0B}
+.sim-status.rejected{background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.35);color:var(--red)}
+.sim-status.rejected .dot{background:var(--red)}
+
 .sim-results{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;
-  margin-top:28px;padding-top:26px;border-top:1px solid rgba(201,169,110,0.15);
+  margin-top:22px;padding-top:26px;border-top:1px solid rgba(201,169,110,0.15);
 }
 .sim-result{text-align:center}
 .sim-result .n{font-family:'Playfair Display',serif;font-size:clamp(18px,2.4vw,24px);font-weight:700;color:var(--white);display:block}
@@ -454,7 +486,8 @@ footer strong{color:var(--gold);font-weight:500}
 
     <!-- SIMULADOR INTERATIVO -->
     <div class="simulator fade-up">
-      <p class="simulator-title">Simule sua entrada</p>
+      <p class="simulator-title">Simule sua aprovação</p>
+      <p class="sim-intro">60% do imóvel é financiado na entrega (Ago/2030). Os outros 40% você distribui como quiser entre entrada, parcelas mensais e reforços anuais — ajuste os campos abaixo e veja sua condição.</p>
 
       <div class="sim-row">
         <div class="sim-row-head">
@@ -464,21 +497,43 @@ footer strong{color:var(--gold);font-weight:500}
         <input type="range" id="simValor" min="643000" max="900000" step="1000" value="643000">
       </div>
 
-      <div class="sim-row">
-        <div class="sim-row-head">
+      <div class="sim-inputs-grid">
+        <div class="sim-input-item">
           <label>Entrada</label>
-          <span class="sim-val" id="simEntradaLabel">10%</span>
+          <div class="sim-input-wrap">
+            <input type="number" id="pctEntrada" value="10" min="0" max="100" inputmode="numeric">
+            <span>%</span>
+          </div>
+          <span class="sim-input-hint">sugestão: 10%</span>
         </div>
-        <input type="range" id="simEntrada" min="10" max="30" step="1" value="10">
+        <div class="sim-input-item">
+          <label>Parcelas mensais (47x)</label>
+          <div class="sim-input-wrap">
+            <input type="number" id="pctParcelas" value="15" min="0" max="100" inputmode="numeric">
+            <span>%</span>
+          </div>
+          <span class="sim-input-hint">sugestão: 15%</span>
+        </div>
+        <div class="sim-input-item">
+          <label>Reforços anuais (4x)</label>
+          <div class="sim-input-wrap">
+            <input type="number" id="pctReforcos" value="15" min="0" max="100" inputmode="numeric">
+            <span>%</span>
+          </div>
+          <span class="sim-input-hint">sugestão: 15%</span>
+        </div>
       </div>
 
+      <div class="sim-status" id="simStatus"></div>
+
       <div class="sim-results">
-        <div class="sim-result"><span class="n" id="resEntradaTotal">—</span><span class="lbl">Entrada total</span></div>
+        <div class="sim-result"><span class="n" id="resTotalPago">—</span><span class="lbl">Total até a entrega (<span id="resTotalPct">40</span>%)</span></div>
+        <div class="sim-result"><span class="n" id="resEntradaValor">—</span><span class="lbl">Entrada</span></div>
         <div class="sim-result"><span class="n" id="resParcelaMensal">—</span><span class="lbl">47x mensais de</span></div>
         <div class="sim-result"><span class="n" id="resReforco">—</span><span class="lbl">4x reforço de</span></div>
-        <div class="sim-result"><span class="n" id="resFinanciado">—</span><span class="lbl">Financiado na entrega</span></div>
+        <div class="sim-result"><span class="n" id="resFinanciado">—</span><span class="lbl">Financiado (<span id="resFinPct">60</span>%)</span></div>
       </div>
-      <p class="sim-note">Simulação estimada para fins ilustrativos. Valores finais sujeitos a confirmação com o corretor.</p>
+      <p class="sim-note">Simulação estimada para fins ilustrativos. Aprovação sujeita a análise da construtora.</p>
     </div>
 
     <div class="aprovado fade-up">
@@ -702,30 +757,58 @@ document.querySelectorAll('.faq-item').forEach(item => {
 
 // Payment simulator
 const simValor = document.getElementById('simValor');
-const simEntrada = document.getElementById('simEntrada');
+const pctEntrada = document.getElementById('pctEntrada');
+const pctParcelas = document.getElementById('pctParcelas');
+const pctReforcos = document.getElementById('pctReforcos');
+const simStatus = document.getElementById('simStatus');
 const fmt = (n) => 'R$ ' + Math.round(n).toLocaleString('pt-BR');
+
+function clampPct(input){
+  let v = parseFloat(input.value);
+  if (isNaN(v) || v < 0) v = 0;
+  if (v > 100) v = 100;
+  return v;
+}
 
 function updateSimulator(){
   const valor = parseFloat(simValor.value);
-  const entradaPct = parseFloat(simEntrada.value);
-
   document.getElementById('simValorLabel').textContent = fmt(valor);
-  document.getElementById('simEntradaLabel').textContent = entradaPct + '%';
 
-  const entradaTotal = valor * (entradaPct / 100);
-  const reforcoTotal = valor * 0.10;
-  const financiadoTotal = valor - entradaTotal - reforcoTotal;
+  const pE = clampPct(pctEntrada);
+  const pP = clampPct(pctParcelas);
+  const pR = clampPct(pctReforcos);
+  const total = pE + pP + pR;
+  const financiadoPct = Math.max(0, 100 - total);
 
-  const parcelaMensal = entradaTotal / 47;
-  const reforcoParcela = reforcoTotal / 4;
+  const entradaValor = valor * pE / 100;
+  const parcelasValor = valor * pP / 100;
+  const reforcosValor = valor * pR / 100;
+  const financiadoValor = valor * financiadoPct / 100;
 
-  document.getElementById('resEntradaTotal').textContent = fmt(entradaTotal);
-  document.getElementById('resParcelaMensal').textContent = fmt(parcelaMensal);
-  document.getElementById('resReforco').textContent = fmt(reforcoParcela);
-  document.getElementById('resFinanciado').textContent = fmt(financiadoTotal);
+  document.getElementById('resTotalPago').textContent = fmt(entradaValor + parcelasValor + reforcosValor);
+  document.getElementById('resTotalPct').textContent = total;
+  document.getElementById('resEntradaValor').textContent = fmt(entradaValor);
+  document.getElementById('resParcelaMensal').textContent = fmt(parcelasValor / 47);
+  document.getElementById('resReforco').textContent = fmt(reforcosValor / 4);
+  document.getElementById('resFinanciado').textContent = fmt(financiadoValor);
+  document.getElementById('resFinPct').textContent = financiadoPct;
+
+  simStatus.classList.remove('approved','analysis','rejected');
+  let text;
+  if (total >= 40) {
+    simStatus.classList.add('approved');
+    text = `Aprovado — ${total}% pago até a entrega atende a condição exigida.`;
+  } else if (total >= 31) {
+    simStatus.classList.add('analysis');
+    text = `Em análise — ${total}% até a entrega. Faltam ${40 - total} pontos percentuais para aprovação direta.`;
+  } else {
+    simStatus.classList.add('rejected');
+    text = `Reprovado — ${total}% é insuficiente. É preciso no mínimo 40% pago até a entrega.`;
+  }
+  simStatus.innerHTML = `<span class="dot"></span><span>${text}</span>`;
 }
-simValor.addEventListener('input', updateSimulator);
-simEntrada.addEventListener('input', updateSimulator);
+
+[simValor, pctEntrada, pctParcelas, pctReforcos].forEach(el => el.addEventListener('input', updateSimulator));
 updateSimulator();
 
 // Phone mask
