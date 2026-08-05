@@ -129,10 +129,18 @@
       submitBtn.disabled = true;
       submitBtn.querySelector('span').textContent = 'Enviando…';
 
-      // Placeholder for a real integration (CRM / e-mail service / webhook).
+      var msg = encodeURIComponent(
+        'Olá! Gostaria de receber informações sobre o novo projeto na Vila Operária.\n\n' +
+        'Nome: ' + nome.value.trim() + '\n' +
+        'E-mail: ' + email.value.trim()
+      );
+      var waUrl = 'https://wa.me/5547999380391?text=' + msg;
+
       setTimeout(function () {
+        window.open(waUrl, '_blank');
         form.style.display = 'none';
         success.classList.add('is-visible');
+        success.querySelector('.success-wa-fallback')?.setAttribute('href', waUrl);
         success.setAttribute('tabindex', '-1');
         success.focus();
       }, 550);
