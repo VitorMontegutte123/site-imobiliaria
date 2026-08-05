@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#08111D"/>
-  <rect x="1" y="1" width="62" height="62" rx="13" fill="none" stroke="#D4A574" stroke-width="1"/>
-  <text x="32" y="41" font-family="Georgia, 'Playfair Display', serif" font-size="26" font-weight="700" fill="#D4A574" text-anchor="middle">GV</text>
-</svg>

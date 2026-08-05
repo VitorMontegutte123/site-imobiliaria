@@ -130,7 +130,7 @@
       submitBtn.querySelector('span').textContent = 'Enviando…';
 
       var msg = encodeURIComponent(
-        'Olá! Gostaria de receber informações sobre o novo projeto na Vila Operária.\n\n' +
+        'Olá! Gostaria de receber informações sobre o Lago di Como.\n\n' +
         'Nome: ' + nome.value.trim() + '\n' +
         'E-mail: ' + email.value.trim()
       );

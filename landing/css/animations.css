@@ -44,11 +44,11 @@
 /* ---- Preloader ---- */
 .preloader-mark{
   opacity: 0;
-  animation: preloaderFade 1.4s var(--ease-soft) forwards;
+  animation: preloaderFade 1.2s var(--ease-soft) forwards;
 }
 @keyframes preloaderFade{
-  0%{ opacity: 0; letter-spacing: 0.9em; }
-  100%{ opacity: 1; letter-spacing: 0.5em; }
+  0%{ opacity: 0; transform: scale(0.85); }
+  100%{ opacity: 1; transform: scale(1); }
 }
 .preloader{
   transition: opacity .8s var(--ease-soft), visibility .8s var(--ease-soft);
