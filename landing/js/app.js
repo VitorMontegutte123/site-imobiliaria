@@ -6,6 +6,15 @@
   'use strict';
 
   /* ------------------------------------------------------------------ */
+  /* Analytics helper                                                    */
+  /* ------------------------------------------------------------------ */
+  function trackEvent(name, params) {
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', name, params || {});
+    }
+  }
+
+  /* ------------------------------------------------------------------ */
   /* Preloader                                                          */
   /* ------------------------------------------------------------------ */
   window.addEventListener('load', function () {
@@ -74,6 +83,24 @@
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   /* ------------------------------------------------------------------ */
+  /* Analytics: WhatsApp + CTA clicks                                   */
+  /* ------------------------------------------------------------------ */
+  document.querySelectorAll('.footer-contact a[href*="wa.me"]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      trackEvent('whatsapp_click', { method: 'whatsapp', link_location: 'footer' });
+    });
+  });
+
+  document.querySelectorAll('a[href="#contato"]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      trackEvent('select_content', {
+        content_type: 'cta_button',
+        item_id: a.classList.contains('navbar-cta') ? 'navbar_cta' : 'hero_or_menu_cta'
+      });
+    });
+  });
+
+  /* ------------------------------------------------------------------ */
   /* Contact form                                                       */
   /* ------------------------------------------------------------------ */
   (function contactForm() {
@@ -135,6 +162,13 @@
         'E-mail: ' + email.value.trim()
       );
       var waUrl = 'https://wa.me/5547999380391?text=' + msg;
+
+      trackEvent('generate_lead', {
+        currency: 'BRL',
+        value: 1,
+        method: 'whatsapp',
+        content_name: 'Lago di Como'
+      });
 
       setTimeout(function () {
         window.open(waUrl, '_blank');
