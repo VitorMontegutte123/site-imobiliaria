@@ -49,7 +49,7 @@
       requestAnimationFrame(loop);
     })();
 
-    document.querySelectorAll('a, button, input, .glass-card').forEach(function (el) {
+    document.querySelectorAll('a, button, input, summary, .glass-card, .swiper-slide').forEach(function (el) {
       el.addEventListener('mouseenter', function () { ring.classList.add('is-active'); });
       el.addEventListener('mouseleave', function () { ring.classList.remove('is-active'); });
     });
@@ -85,9 +85,12 @@
   /* ------------------------------------------------------------------ */
   /* Analytics: WhatsApp + CTA clicks                                   */
   /* ------------------------------------------------------------------ */
-  document.querySelectorAll('.footer-contact a[href*="wa.me"]').forEach(function (a) {
+  document.querySelectorAll('.footer-contact a[href*="wa.me"], .floating-wa[href*="wa.me"]').forEach(function (a) {
     a.addEventListener('click', function () {
-      trackEvent('whatsapp_click', { method: 'whatsapp', link_location: 'footer' });
+      trackEvent('whatsapp_click', {
+        method: 'whatsapp',
+        link_location: a.classList.contains('floating-wa') ? 'floating_button' : 'footer'
+      });
     });
   });
 
@@ -159,6 +162,7 @@
       var msg = encodeURIComponent(
         'Olá! Gostaria de receber informações sobre o Lago di Como.\n\n' +
         'Nome: ' + nome.value.trim() + '\n' +
+        'Telefone: ' + telefone.value.trim() + '\n' +
         'E-mail: ' + email.value.trim()
       );
       var waUrl = 'https://wa.me/5547999380391?text=' + msg;

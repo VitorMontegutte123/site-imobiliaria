@@ -9,6 +9,12 @@
   .concept-media{ aspect-ratio: 16/10; order: -1; }
   .glass-grid{ grid-template-columns: repeat(2, 1fr); }
   .navbar-nav{ gap: 26px; margin-left: 36px; }
+
+  .location{ grid-template-columns: 1fr; }
+  .location-map{ aspect-ratio: 16/10; }
+
+  .about{ grid-template-columns: 1fr; }
+  .about-panel{ aspect-ratio: 16/9; order: -1; max-width: 420px; margin: 0 auto; }
 }
 
 /* ---- Mobile ---- */
@@ -41,6 +47,22 @@
 
   .cursor{ display: none; }
   body{ cursor: auto; }
+
+  .hero-actions{ flex-direction: column; width: 100%; }
+  .hero-actions .btn{ width: 100%; }
+
+  .location-list li{ align-items: center; }
+  .about-panel{ padding: 30px; }
+
+  .faq-question{ font-size: 15.5px; gap: 16px; }
+
+  .floating-wa{ right: 16px; bottom: 16px; width: 50px; height: 50px; }
+  .floating-wa svg{ width: 23px; height: 23px; }
+
+  .lightbox-close{ top: 16px; right: 16px; width: 40px; height: 40px; }
+  .lightbox-prev{ left: 8px; }
+  .lightbox-next{ right: 8px; }
+  .lightbox-nav{ width: 40px; height: 40px; }
 }
 
 /* ---- Small mobile ---- */

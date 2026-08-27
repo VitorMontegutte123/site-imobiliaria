@@ -108,6 +108,37 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* Scroll progress bar                                                */
+  /* ------------------------------------------------------------------ */
+  function scrollProgress() {
+    var bar = document.getElementById('scrollProgress');
+    if (!bar) return;
+    var update = function () {
+      var doc = document.documentElement;
+      var max = doc.scrollHeight - doc.clientHeight;
+      var pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+      bar.style.width = pct + '%';
+    };
+    (window.__lenis ? window.__lenis.on.bind(window.__lenis) : window.addEventListener.bind(window))('scroll', update);
+    window.addEventListener('resize', update);
+    update();
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Floating WhatsApp button — appears after leaving the hero          */
+  /* ------------------------------------------------------------------ */
+  function floatingWaVisibility() {
+    var btn = document.getElementById('floatingWa');
+    var hero = document.getElementById('hero');
+    if (!btn || !hero) return;
+    var toggle = function () {
+      btn.classList.toggle('is-visible', window.scrollY > hero.offsetHeight * 0.6);
+    };
+    (window.__lenis ? window.__lenis.on.bind(window.__lenis) : window.addEventListener.bind(window))('scroll', toggle);
+    toggle();
+  }
+
+  /* ------------------------------------------------------------------ */
   /* Glass card subtle 3D tilt                                          */
   /* ------------------------------------------------------------------ */
   function glassTilt() {
@@ -141,5 +172,7 @@
     navbarState();
     heroGlow();
     glassTilt();
+    scrollProgress();
+    floatingWaVisibility();
   });
 })();

@@ -31,6 +31,7 @@
 <link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/playfair-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/images/hero.webp" as="image">
+<link rel="preconnect" href="https://www.googletagmanager.com">
 
 <!-- Styles -->
 <link rel="stylesheet" href="css/style.css">
@@ -64,12 +65,47 @@
   "address": { "@type": "PostalAddress", "addressLocality": "Itajaí", "addressRegion": "SC", "addressCountry": "BR" }
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Quando o Lago di Como será lançado oficialmente?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Assim que o Registro de Incorporação for concluído. As informações completas — plantas, valores e prazo de entrega — serão divulgadas nesse momento." }
+    },
+    {
+      "@type": "Question",
+      "name": "Para que serve o cadastro nesta página?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Serve para você ser avisado em primeira mão, por WhatsApp ou e-mail, assim que novas informações sobre o Lago di Como forem liberadas. Não há custo ou compromisso." }
+    },
+    {
+      "@type": "Question",
+      "name": "Quem é a GV Imóveis?",
+      "acceptedAnswer": { "@type": "Answer", "text": "A GV Imóveis é conduzida por Gustavo Montegutte, corretor de imóveis com CRECI 10981J, com atuação em Itajaí/SC. O atendimento é direto, sem intermediários." }
+    },
+    {
+      "@type": "Question",
+      "name": "As imagens desta página representam o projeto final?",
+      "acceptedAnswer": { "@type": "Answer", "text": "As imagens são ilustrativas e podem sofrer alterações. O projeto ainda está em fase de pré-lançamento, sem Registro de Incorporação." }
+    },
+    {
+      "@type": "Question",
+      "name": "Como faço para falar diretamente com a GV Imóveis?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Use o botão de WhatsApp fixo na tela ou preencha o formulário de contato — a resposta é direta, sem intermediários." }
+    }
+  ]
+}
+</script>
 
 <script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
 <a href="#main" class="skip-link">Pular para o conteúdo</a>
+
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
 <!-- CUSTOM CURSOR -->
 <div class="cursor" aria-hidden="true">
@@ -92,8 +128,9 @@
 
     <nav class="navbar-nav" aria-label="Navegação principal">
       <a href="#conceito">Conceito</a>
-      <a href="#diferenciais">Diferenciais</a>
       <a href="#galeria">Galeria</a>
+      <a href="#localizacao">Localização</a>
+      <a href="#diferenciais">Diferenciais</a>
       <a href="#contato">Contato</a>
     </nav>
 
@@ -109,8 +146,9 @@
 <div class="mobile-menu" id="mobileMenu">
   <nav aria-label="Navegação mobile">
     <a href="#conceito">Conceito</a>
-    <a href="#diferenciais">Diferenciais</a>
     <a href="#galeria">Galeria</a>
+    <a href="#localizacao">Localização</a>
+    <a href="#diferenciais">Diferenciais</a>
     <a href="#contato">Contato</a>
   </nav>
   <a href="#contato" class="btn btn-gold">Quero conhecer</a>
@@ -133,10 +171,19 @@
       <p class="eyebrow reveal-fade" data-delay="0">GV Imóveis apresenta</p>
       <h1 class="hero-title" id="heroTitle">Lago di Como</h1>
       <p class="hero-tagline reveal-fade" data-delay="0.1">Arquitetura pensada para permanecer.</p>
-      <p class="hero-desc reveal-fade" data-delay="0.2">Um novo projeto residencial na Vila Operária, um dos endereços mais completos de Itajaí. Em breve, com todos os detalhes que essa conquista merece.</p>
-      <a href="#contato" class="btn btn-gold reveal-fade" data-delay="0.3">
-        <span>Quero conhecer</span>
+      <a href="#localizacao" class="hero-badge reveal-fade" data-delay="0.15">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s7-6.1 7-11.6C19 5.3 15.9 3 12 3S5 5.3 5 9.4C5 14.9 12 21 12 21Z" stroke="currentColor" stroke-width="1.3"/><circle cx="12" cy="9.4" r="2.6" stroke="currentColor" stroke-width="1.3"/></svg>
+        <span>Vila Operária · Itajaí/SC</span>
       </a>
+      <p class="hero-desc reveal-fade" data-delay="0.2">Um novo projeto residencial na Vila Operária, um dos endereços mais completos de Itajaí. Em breve, com todos os detalhes que essa conquista merece.</p>
+      <div class="hero-actions reveal-fade" data-delay="0.3">
+        <a href="#contato" class="btn btn-gold">
+          <span>Quero conhecer</span>
+        </a>
+        <a href="#galeria" class="btn btn-ghost">
+          <span>Ver o projeto</span>
+        </a>
+      </div>
     </div>
 
     <div class="scroll-indicator" aria-hidden="true">
@@ -171,29 +218,69 @@
 
     <div class="swiper gallery-swiper reveal-image">
       <div class="swiper-wrapper">
-        <div class="swiper-slide">
+        <div class="swiper-slide" data-lightbox-index="0">
           <picture>
             <source srcset="assets/images/gallery-1.webp" type="image/webp">
             <img src="assets/images/gallery-1.jpg" alt="Fachada do Lago di Como" loading="lazy">
           </picture>
           <span class="gallery-caption">A torre — imagem ilustrativa, sujeita a alterações</span>
+          <span class="gallery-zoom" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.4"/><path d="M15.2 15.2 21 21M10.5 7.5v6M7.5 10.5h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
         </div>
-        <div class="swiper-slide">
+        <div class="swiper-slide" data-lightbox-index="1">
           <picture>
             <source srcset="assets/images/gallery-2.webp" type="image/webp">
             <img src="assets/images/gallery-2.jpg" alt="Entrada do Lago di Como" loading="lazy">
           </picture>
           <span class="gallery-caption">A entrada — imagem ilustrativa, sujeita a alterações</span>
+          <span class="gallery-zoom" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.4"/><path d="M15.2 15.2 21 21M10.5 7.5v6M7.5 10.5h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
         </div>
-        <div class="swiper-slide">
+        <div class="swiper-slide" data-lightbox-index="2">
           <picture>
             <source srcset="assets/images/gallery-3.webp" type="image/webp">
             <img src="assets/images/gallery-3.jpg" alt="Fachada do Lago di Como ao entardecer" loading="lazy">
           </picture>
           <span class="gallery-caption">Os detalhes — imagem ilustrativa, sujeita a alterações</span>
+          <span class="gallery-zoom" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.4"/><path d="M15.2 15.2 21 21M10.5 7.5v6M7.5 10.5h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
         </div>
       </div>
       <div class="swiper-pagination"></div>
+    </div>
+  </section>
+
+  <!-- LOCALIZAÇÃO -->
+  <section class="location" id="localizacao">
+    <div class="location-text">
+      <p class="eyebrow reveal-up">Localização</p>
+      <h2 class="reveal-up">Vila Operária: um bairro completo em Itajaí.</h2>
+      <p class="body-lg reveal-up">Consolidado e central, o bairro reúne no entorno boa parte do que a rotina pede — comércio, serviços, educação e vias de acesso rápido a outras regiões da cidade. O Lago di Como nasce nesse contexto: perto de tudo, sem abrir mão da tranquilidade.</p>
+
+      <ul class="location-list reveal-up">
+        <li>
+          <span class="location-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M6 13v13h20V13" stroke="currentColor" stroke-width="1.2"/><path d="M4 13l2.4-7h19.2l2.4 7" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M12 26v-7h8v7" stroke="currentColor" stroke-width="1.2"/></svg></span>
+          <div><h3>Comércio &amp; serviços</h3><p>Ampla oferta no entorno, para o dia a dia sem deslocamentos longos.</p></div>
+        </li>
+        <li>
+          <span class="location-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M16 6 4 11.5 16 17l12-5.5L16 6Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M9 14.5V21c0 2 3.1 4 7 4s7-2 7-4v-6.5" stroke="currentColor" stroke-width="1.2"/></svg></span>
+          <div><h3>Educação</h3><p>Escolas e opções de ensino nas proximidades.</p></div>
+        </li>
+        <li>
+          <span class="location-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M16 5v22M5 16h22" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><rect x="7" y="7" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.2"/></svg></span>
+          <div><h3>Saúde</h3><p>Estrutura de atendimento acessível na região.</p></div>
+        </li>
+        <li>
+          <span class="location-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M4 21h24M6 21l2-8h16l2 8" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><circle cx="10" cy="24" r="1.8" stroke="currentColor" stroke-width="1.2"/><circle cx="22" cy="24" r="1.8" stroke="currentColor" stroke-width="1.2"/></svg></span>
+          <div><h3>Mobilidade</h3><p>Vias de acesso rápido a outras regiões de Itajaí.</p></div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="location-map reveal-image">
+      <iframe
+        src="https://www.google.com/maps?q=Vila+Oper%C3%A1ria,+Itaja%C3%AD+-+SC&output=embed"
+        title="Mapa: Vila Operária, Itajaí - SC"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        aria-label="Mapa da localização da Vila Operária em Itajaí"></iframe>
     </div>
   </section>
 
@@ -239,6 +326,78 @@
     </div>
   </section>
 
+  <!-- SOBRE A GV IMÓVEIS -->
+  <section class="about" id="sobre">
+    <div class="about-panel reveal-image">
+      <img src="assets/images/brand/logo-mark-gold.png" alt="" class="about-mark">
+      <span class="about-rule" aria-hidden="true"></span>
+      <p class="about-signature">Gustavo Montegutte</p>
+      <p class="about-signature-role">Corretor de Imóveis — CRECI 10981J</p>
+    </div>
+
+    <div class="about-text">
+      <p class="eyebrow reveal-up">Quem conduz este projeto</p>
+      <h2 class="reveal-up">GV Imóveis: relação direta, do primeiro contato à entrega das chaves.</h2>
+      <p class="body-lg reveal-up">A GV Imóveis é conduzida por Gustavo Montegutte, com atuação em Itajaí/SC. O acompanhamento é direto e pessoal — sem intermediários, sem respostas automáticas — para que cada decisão sobre o Lago di Como seja tomada com clareza.</p>
+
+      <ul class="about-badges reveal-up">
+        <li>CRECI 10981J</li>
+        <li>Atendimento em Itajaí/SC</li>
+        <li>Contato direto por WhatsApp</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" id="faq">
+    <div class="faq-header">
+      <p class="eyebrow reveal-up">Perguntas frequentes</p>
+      <h2 class="reveal-up">O que você precisa saber.</h2>
+    </div>
+
+    <div class="faq-list reveal-up">
+      <details class="faq-item" name="faq">
+        <summary class="faq-question">
+          <span>Quando o Lago di Como será lançado oficialmente?</span>
+          <span class="faq-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="faq-answer"><p>Assim que o Registro de Incorporação for concluído. As informações completas — plantas, valores e prazo de entrega — serão divulgadas nesse momento.</p></div>
+      </details>
+
+      <details class="faq-item" name="faq">
+        <summary class="faq-question">
+          <span>Para que serve o cadastro nesta página?</span>
+          <span class="faq-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="faq-answer"><p>Serve para você ser avisado em primeira mão, por WhatsApp ou e-mail, assim que novas informações forem liberadas. Não há custo ou compromisso.</p></div>
+      </details>
+
+      <details class="faq-item" name="faq">
+        <summary class="faq-question">
+          <span>Quem é a GV Imóveis?</span>
+          <span class="faq-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="faq-answer"><p>A GV Imóveis é conduzida por Gustavo Montegutte, corretor de imóveis com CRECI 10981J, com atuação em Itajaí/SC. O atendimento é direto, sem intermediários.</p></div>
+      </details>
+
+      <details class="faq-item" name="faq">
+        <summary class="faq-question">
+          <span>As imagens desta página representam o projeto final?</span>
+          <span class="faq-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="faq-answer"><p>As imagens são ilustrativas e podem sofrer alterações. O projeto ainda está em fase de pré-lançamento, sem Registro de Incorporação.</p></div>
+      </details>
+
+      <details class="faq-item" name="faq">
+        <summary class="faq-question">
+          <span>Como faço para falar diretamente com a GV Imóveis?</span>
+          <span class="faq-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="faq-answer"><p>Use o botão de WhatsApp fixo na tela ou preencha o formulário de contato — a resposta é direta, sem intermediários.</p></div>
+      </details>
+    </div>
+  </section>
+
   <!-- CONTATO / FORM -->
   <section class="contact" id="contato">
     <div class="contact-inner">
@@ -266,7 +425,7 @@
         <button type="submit" class="btn btn-gold btn-block" id="formSubmit">
           <span>Quero receber informações</span>
         </button>
-        <p class="form-note">Entraremos em contato quando houver novidades.</p>
+        <p class="form-note">Entraremos em contato quando houver novidades. Seus dados são usados apenas para isso.</p>
       </form>
 
       <div class="contact-success" id="contactSuccess" role="status">
@@ -290,6 +449,16 @@
       <p>Gustavo Montegutte · CRECI 10981J · Itajaí/SC</p>
     </div>
 
+    <nav class="footer-links" aria-label="Links do site">
+      <a href="#conceito">Conceito</a>
+      <a href="#galeria">Galeria</a>
+      <a href="#localizacao">Localização</a>
+      <a href="#diferenciais">Diferenciais</a>
+      <a href="#sobre">Sobre</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contato">Contato</a>
+    </nav>
+
     <div class="footer-contact">
       <a href="https://wa.me/5547999380391?text=Ol%C3%A1!%20Gostaria%20de%20receber%20informa%C3%A7%C3%B5es%20sobre%20o%20Lago%20di%20Como." target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
         <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 4C9.4 4 4 9.4 4 16c0 2.5.7 4.9 2 6.9L4 28l5.3-2c1.9 1.1 4.1 1.7 6.7 1.7 6.6 0 12-5.4 12-12S22.6 4 16 4Z" stroke="currentColor" stroke-width="1.3"/><path d="M11 15.3c1.3 2.7 3 4.4 5.7 5.7.9.4 1.9 0 2.4-.9l.4-.7c.2-.4.7-.5 1.1-.3l2 1c.4.2.6.7.4 1.1-.7 1.5-2.2 2.4-3.9 2.2-3.7-.4-8-4.7-8.4-8.4-.2-1.7.7-3.2 2.2-3.9.4-.2.9 0 1.1.4l1 2c.2.4.1.9-.3 1.1l-.7.4c-.9.5-1.3 1.5-.9 2.4Z" stroke="currentColor" stroke-width="1.3"/></svg>
@@ -303,6 +472,29 @@
   </div>
 </footer>
 
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/5547999380391?text=Ol%C3%A1!%20Gostaria%20de%20receber%20informa%C3%A7%C3%B5es%20sobre%20o%20Lago%20di%20Como."
+   class="floating-wa" id="floatingWa" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+  <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 4C9.4 4 4 9.4 4 16c0 2.5.7 4.9 2 6.9L4 28l5.3-2c1.9 1.1 4.1 1.7 6.7 1.7 6.6 0 12-5.4 12-12S22.6 4 16 4Z" stroke="currentColor" stroke-width="1.3"/><path d="M11 15.3c1.3 2.7 3 4.4 5.7 5.7.9.4 1.9 0 2.4-.9l.4-.7c.2-.4.7-.5 1.1-.3l2 1c.4.2.6.7.4 1.1-.7 1.5-2.2 2.4-3.9 2.2-3.7-.4-8-4.7-8.4-8.4-.2-1.7.7-3.2 2.2-3.9.4-.2.9 0 1.1.4l1 2c.2.4.1.9-.3 1.1l-.7.4c-.9.5-1.3 1.5-.9 2.4Z" stroke="currentColor" stroke-width="1.3"/></svg>
+</a>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visualização ampliada da imagem">
+  <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Fechar">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5 5 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+  </button>
+  <button type="button" class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Imagem anterior">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <figure class="lightbox-figure">
+    <img src="" alt="" class="lightbox-img" id="lightboxImg">
+    <figcaption class="lightbox-caption" id="lightboxCaption"></figcaption>
+  </figure>
+  <button type="button" class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Próxima imagem">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</div>
+
 <!-- VENDOR SCRIPTS (self-hosted) -->
 <script src="js/vendor/gsap.min.js"></script>
 <script src="js/vendor/ScrollTrigger.min.js"></script>
@@ -313,6 +505,7 @@
 <!-- APP SCRIPTS -->
 <script src="js/scroll.js"></script>
 <script src="js/slider.js"></script>
+<script src="js/lightbox.js"></script>
 <script src="js/animations.js"></script>
 <script src="js/app.js"></script>
 

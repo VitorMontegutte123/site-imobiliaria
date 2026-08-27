@@ -76,6 +76,12 @@ body{
 }
 .skip-link:focus{ top: 16px; }
 
+/* ---- Scroll progress ---- */
+.scroll-progress{
+  position: fixed; top: 0; left: 0; height: 2px; width: 0%; z-index: 10002;
+  background: linear-gradient(90deg, var(--gold), #fff);
+}
+
 /* ---- Typography ---- */
 .eyebrow{
   font-family: var(--font-body);
@@ -230,12 +236,21 @@ main > section{
 }
 .hero-tagline{
   font-family: var(--font-display); font-style: italic; font-weight: 400;
-  font-size: clamp(17px, 2vw, 22px); color: var(--gold); margin-bottom: 22px;
+  font-size: clamp(17px, 2vw, 22px); color: var(--gold); margin-bottom: 18px;
 }
+.hero-badge{
+  display: inline-flex; align-items: center; gap: 8px; margin-bottom: 22px;
+  padding: 8px 16px; border: 1px solid rgba(212,165,116,0.35); border-radius: 999px;
+  font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary);
+  transition: border-color .3s, color .3s;
+}
+.hero-badge svg{ width: 14px; height: 14px; color: var(--gold); flex-shrink: 0; }
+.hero-badge:hover{ border-color: var(--gold); color: var(--white); }
 .hero-desc{
   font-size: 15px; color: var(--text-secondary); max-width: 460px; margin: 0 auto 44px;
   line-height: 1.85; font-weight: 300;
 }
+.hero-actions{ display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; }
 .scroll-indicator{
   position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%); z-index: 2;
   display: flex; flex-direction: column; align-items: center; gap: 10px;
@@ -268,6 +283,15 @@ main > section{
 .gallery-swiper .swiper-slide::after{
   content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(5,10,17,0.65) 0%, transparent 30%);
 }
+.gallery-zoom{
+  position: absolute; top: 24px; right: 24px; z-index: 2;
+  width: 38px; height: 38px; border-radius: 50%; color: var(--white);
+  border: 1px solid rgba(255,255,255,0.4); display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(0.85); transition: opacity .3s var(--ease), transform .3s var(--ease), border-color .3s;
+}
+.gallery-zoom svg{ width: 17px; height: 17px; }
+.gallery-swiper .swiper-slide:hover .gallery-zoom,
+.gallery-swiper .swiper-slide:focus-visible .gallery-zoom{ opacity: 1; transform: scale(1); border-color: var(--gold); color: var(--gold); }
 .gallery-caption{
   display: block; position: absolute; left: 32px; bottom: 26px; z-index: 2;
   font-size: 12px; letter-spacing: 0.08em; color: rgba(255,255,255,0.85);
@@ -297,6 +321,76 @@ main > section{
 .glass-card:hover{ background: rgba(20,36,54,0.85); }
 .glass-icon{ display: inline-flex; color: var(--gold); width: 34px; height: 34px; margin-bottom: 22px; }
 .glass-card p{ font-size: 13.5px; color: var(--text-secondary); line-height: 1.8; }
+
+/* ==========================================================================
+   LOCALIZAÇÃO
+   ========================================================================== */
+.location{
+  display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: clamp(40px, 6vw, 100px);
+}
+.location-text h2{ margin-bottom: 22px; }
+.location-list{ margin-top: 32px; display: flex; flex-direction: column; gap: 22px; max-width: 480px; }
+.location-list li{ display: flex; align-items: flex-start; gap: 16px; }
+.location-icon{
+  flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; color: var(--gold);
+  border: 1px solid rgba(212,165,116,0.3); display: flex; align-items: center; justify-content: center;
+}
+.location-icon svg{ width: 19px; height: 19px; }
+.location-list h3{ font-size: 15.5px; margin-bottom: 4px; }
+.location-list p{ font-size: 13.5px; color: var(--text-secondary); line-height: 1.7; }
+.location-map{ aspect-ratio: 4/5; overflow: hidden; border-radius: 2px; border: 1px solid rgba(212,165,116,0.18); filter: grayscale(0.3) contrast(1.05); }
+.location-map iframe{ width: 100%; height: 100%; border: 0; display: block; }
+
+/* ==========================================================================
+   SOBRE A GV IMÓVEIS
+   ========================================================================== */
+.about{
+  display: grid; grid-template-columns: 1fr 1.15fr; align-items: center; gap: clamp(40px, 6vw, 100px);
+}
+.about-panel{
+  aspect-ratio: 4/5; border: 1px solid rgba(212,165,116,0.25); border-radius: 2px;
+  background: linear-gradient(160deg, rgba(212,165,116,0.08), transparent 60%), var(--bg-elevated);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px;
+}
+.about-mark{ width: 56px; height: auto; margin-bottom: 28px; }
+.about-rule{ width: 40px; height: 1px; background: var(--gold-soft); margin-bottom: 22px; }
+.about-signature{ font-family: var(--font-display); font-size: 20px; margin-bottom: 6px; }
+.about-signature-role{ font-size: 12px; letter-spacing: 0.06em; color: var(--text-secondary); }
+.about-text h2{ margin-bottom: 22px; }
+.about-badges{ display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.about-badges li{
+  font-size: 11.5px; letter-spacing: 0.06em; color: var(--text-secondary);
+  border: 1px solid rgba(212,165,116,0.25); border-radius: 999px; padding: 9px 18px;
+}
+
+/* ==========================================================================
+   FAQ
+   ========================================================================== */
+.faq-header{ max-width: 640px; margin: 0 auto 48px; text-align: center; }
+.faq-header .eyebrow{ margin-left: auto; margin-right: auto; }
+.faq-list{ max-width: 760px; margin: 0 auto; }
+.faq-item{ border-bottom: 1px solid rgba(212,165,116,0.16); }
+.faq-question{
+  cursor: pointer; list-style: none; padding: 26px 4px; display: flex; align-items: center;
+  justify-content: space-between; gap: 24px; font-family: var(--font-display); font-size: 17px; font-weight: 600;
+  -webkit-tap-highlight-color: transparent;
+}
+.faq-question::-webkit-details-marker{ display: none; }
+.faq-question::marker{ content: ''; }
+.faq-icon{
+  position: relative; flex-shrink: 0; width: 20px; height: 20px;
+}
+.faq-icon::before, .faq-icon::after{
+  content: ''; position: absolute; top: 50%; left: 50%; background: var(--gold);
+  transition: transform .35s var(--ease);
+}
+.faq-icon::before{ width: 14px; height: 1px; transform: translate(-50%, -50%); }
+.faq-icon::after{ width: 1px; height: 14px; transform: translate(-50%, -50%); }
+.faq-item[open] .faq-icon::after{ transform: translate(-50%, -50%) rotate(90deg); opacity: 0; }
+.faq-answer{ padding: 0 4px 26px; max-width: 640px; }
+.faq-answer p{ font-size: 14.5px; color: var(--text-secondary); line-height: 1.85; }
+.faq-item[open] .faq-answer{ animation: faqFadeIn .4s var(--ease); }
+@keyframes faqFadeIn{ from{ opacity: 0; transform: translateY(-6px); } to{ opacity: 1; transform: translateY(0); } }
 
 /* ==========================================================================
    CONTACT
@@ -347,6 +441,9 @@ main > section{
 .footer-brand .footer-logo{ font-family: var(--font-display); font-size: 16px; }
 .footer-brand .footer-logo em{ font-style: normal; color: var(--gold); }
 .footer-brand p{ flex-basis: 100%; font-size: 12px; color: var(--text-secondary); margin-top: -2px; }
+.footer-links{ display: flex; flex-wrap: wrap; gap: 18px 26px; }
+.footer-links a{ font-size: 12.5px; color: var(--text-secondary); transition: color .3s; }
+.footer-links a:hover{ color: var(--gold); }
 .footer-contact a{
   display: inline-flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-secondary);
   transition: color .3s;
@@ -357,3 +454,43 @@ main > section{
   flex-basis: 100%; font-size: 10.5px; line-height: 1.8; color: rgba(255,255,255,0.28);
   padding-top: 28px; margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.06);
 }
+
+/* ==========================================================================
+   FLOATING WHATSAPP
+   ========================================================================== */
+.floating-wa{
+  position: fixed; right: 24px; bottom: 24px; z-index: 400;
+  width: 56px; height: 56px; border-radius: 50%; background: var(--gold); color: var(--black);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 12px 30px -8px rgba(0,0,0,0.55);
+  opacity: 0; transform: translateY(16px) scale(0.9); pointer-events: none;
+  transition: opacity .4s var(--ease), transform .4s var(--ease);
+}
+.floating-wa.is-visible{ opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+.floating-wa svg{ width: 26px; height: 26px; }
+.floating-wa:hover{ animation: breathe 1.6s ease-in-out infinite; }
+
+/* ==========================================================================
+   LIGHTBOX
+   ========================================================================== */
+.lightbox{
+  position: fixed; inset: 0; z-index: 10001; background: rgba(5,10,17,0.94);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; transition: opacity .35s var(--ease), visibility .35s var(--ease);
+}
+.lightbox.is-open{ opacity: 1; visibility: visible; }
+.lightbox-figure{ max-width: min(90vw, 900px); max-height: 85vh; text-align: center; }
+.lightbox-img{ max-width: 100%; max-height: 78vh; width: auto; height: auto; margin: 0 auto; border: 1px solid rgba(212,165,116,0.2); }
+.lightbox-caption{ margin-top: 18px; font-size: 12.5px; letter-spacing: 0.04em; color: var(--text-secondary); }
+.lightbox-close, .lightbox-nav{
+  position: fixed; color: var(--white); width: 46px; height: 46px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center;
+  transition: border-color .3s, color .3s, background .3s;
+}
+.lightbox-close svg, .lightbox-nav svg{ width: 18px; height: 18px; }
+.lightbox-close:hover, .lightbox-nav:hover{ border-color: var(--gold); color: var(--gold); background: rgba(212,165,116,0.08); }
+.lightbox-close{ top: 28px; right: 28px; }
+.lightbox-prev{ left: 24px; top: 50%; transform: translateY(-50%); }
+.lightbox-next{ right: 24px; top: 50%; transform: translateY(-50%); }
+html.lightbox-locked{ overflow: hidden; }
