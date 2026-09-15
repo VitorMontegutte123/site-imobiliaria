@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sorteio Justo da Feira</title>
+<meta name="description" content="Sistema de sorteio diário e justo para rotação de 29 membros da feira, com persistência local.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0b0e14;
+  --surface:#12161f;
+  --surface-2:#171c27;
+  --border:#232a38;
+  --border-soft:#1b212d;
+  --text:#e7e9ee;
+  --text-dim:#9aa3b2;
+  --text-faint:#5b6472;
+  --accent:#6ee7b7;
+  --accent-strong:#34d399;
+  --warn:#f5b942;
+  --warn-bg:rgba(245,185,66,0.12);
+  --danger:#f87171;
+  --danger-strong:#ef4444;
+  --pending:#7dd3fc;
+  --radius:14px;
+  --radius-sm:9px;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:
+    radial-gradient(circle at 15% -10%, rgba(110,231,183,0.06), transparent 40%),
+    radial-gradient(circle at 85% 0%, rgba(125,211,252,0.05), transparent 40%),
+    var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  padding:32px 20px 80px;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+
+/* ---------- HEADER ---------- */
+header.app-header{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;
+  padding-bottom:20px;border-bottom:1px solid var(--border-soft);
+}
+.app-title{display:flex;flex-direction:column;gap:4px}
+.app-title h1{font-size:22px;font-weight:800;letter-spacing:-0.02em}
+.app-title p{font-size:13px;color:var(--text-dim);text-transform:capitalize}
+.header-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:999px;font-size:12.5px;font-weight:600;
+  background:var(--surface-2);border:1px solid var(--border);color:var(--text-dim);
+  white-space:nowrap;
+}
+.pill.accent{color:var(--accent);border-color:rgba(110,231,183,0.25);background:rgba(110,231,183,0.08)}
+
+/* ---------- HERO ---------- */
+.hero{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px;display:flex;flex-direction:column;gap:22px;
+}
+.hero-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px}
+.hero-top h2{font-size:15px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em}
+
+.btn{
+  appearance:none;border:none;cursor:pointer;font-family:inherit;font-weight:700;font-size:14px;
+  padding:13px 22px;border-radius:10px;transition:transform 0.15s ease, filter 0.15s ease, opacity 0.15s ease;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn:active{transform:scale(0.97)}
+.btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.btn-primary{background:linear-gradient(135deg,var(--accent-strong),#22c55e);color:#04140d;box-shadow:0 6px 18px rgba(52,211,153,0.18)}
+.btn-primary:hover:not(:disabled){filter:brightness(1.08)}
+.btn-secondary{background:var(--surface-2);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover:not(:disabled){border-color:#3a4356}
+.btn-danger{background:rgba(248,113,113,0.12);color:var(--danger);border:1px solid rgba(248,113,113,0.3)}
+.btn-danger:hover:not(:disabled){background:rgba(248,113,113,0.2)}
+.btn-warn{background:rgba(245,185,66,0.12);color:var(--warn);border:1px solid rgba(245,185,66,0.32)}
+.btn-warn:hover:not(:disabled){background:rgba(245,185,66,0.2)}
+.btn-block{width:100%;justify-content:center}
+.btn-sm{padding:8px 14px;font-size:12.5px;border-radius:8px}
+
+.cards-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:560px){.cards-row{grid-template-columns:1fr}}
+.name-card{
+  background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:26px 18px;text-align:center;display:flex;flex-direction:column;gap:8px;
+  min-height:110px;justify-content:center;transition:border-color 0.25s ease, background 0.25s ease;
+}
+.name-card .label{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint)}
+.name-card .name{font-size:21px;font-weight:800;color:var(--text-faint);letter-spacing:-0.01em}
+.name-card.filled .name{color:var(--text)}
+.name-card.filled{border-color:rgba(110,231,183,0.35);background:rgba(110,231,183,0.05)}
+.name-card.confirmed{border-color:rgba(52,211,153,0.5);background:rgba(52,211,153,0.08)}
+
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+
+.banner{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;
+  padding:16px 18px;border-radius:var(--radius-sm);
+  background:rgba(125,211,252,0.08);border:1px solid rgba(125,211,252,0.25);
+}
+.banner strong{color:var(--pending)}
+.banner.done{background:rgba(52,211,153,0.08);border-color:rgba(52,211,153,0.25)}
+.banner.done strong{color:var(--accent-strong)}
+.banner p{font-size:13.5px;color:var(--text-dim);line-height:1.5}
+
+/* ---------- ROSTER ---------- */
+.section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.section-head h2{font-size:16px;font-weight:700}
+.section-head .count{font-size:12.5px;color:var(--text-dim);font-weight:500}
+
+.table-scroll{overflow-x:auto;border-radius:var(--radius-sm);border:1px solid var(--border-soft)}
+table{width:100%;border-collapse:collapse;min-width:640px}
+thead th{
+  text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;font-weight:700;
+  color:var(--text-faint);padding:12px 14px;background:var(--surface-2);border-bottom:1px solid var(--border);
+  position:sticky;top:0;
+}
+tbody td{padding:12px 14px;font-size:13.5px;border-bottom:1px solid var(--border-soft);color:var(--text)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,0.015)}
+.member-name{font-weight:600}
+.badge{
+  display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;
+  font-size:11.5px;font-weight:700;white-space:nowrap;
+}
+.badge.status-sorteado{background:rgba(52,211,153,0.14);color:var(--accent-strong)}
+.badge.status-pendente{background:rgba(125,211,252,0.14);color:var(--pending)}
+.badge.status-aguardando{background:var(--surface-2);color:var(--text-faint);border:1px solid var(--border)}
+.badge.inactive-warn{background:var(--warn-bg);color:var(--warn)}
+.badge.never{background:rgba(167,139,250,0.14);color:#a78bfa}
+.remove-btn{
+  background:none;border:none;color:var(--text-faint);cursor:pointer;font-size:15px;padding:2px 6px;
+  border-radius:6px;line-height:1;transition:color 0.15s ease, background 0.15s ease;
+}
+.remove-btn:hover{color:var(--danger);background:rgba(248,113,113,0.1)}
+.days-cell{display:flex;align-items:center;gap:8px}
+
+/* ---------- CONFIG DRAWER ---------- */
+.drawer summary{
+  cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;
+  font-size:14.5px;font-weight:700;padding:2px 0;
+}
+.drawer summary::-webkit-details-marker{display:none}
+.drawer summary::after{content:'▾';color:var(--text-faint);transition:transform 0.2s ease;font-size:12px}
+.drawer[open] summary::after{transform:rotate(180deg)}
+.drawer-body{display:flex;flex-direction:column;gap:22px;padding-top:20px;margin-top:16px;border-top:1px solid var(--border-soft)}
+.config-block{display:flex;flex-direction:column;gap:10px}
+.config-block h3{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-dim)}
+.config-block .hint{font-size:12px;color:var(--text-faint);line-height:1.5}
+textarea{
+  width:100%;min-height:180px;resize:vertical;background:var(--surface-2);border:1px solid var(--border);
+  border-radius:var(--radius-sm);color:var(--text);font-family:inherit;font-size:13px;padding:12px 14px;line-height:1.6;
+}
+textarea:focus{outline:none;border-color:rgba(110,231,183,0.4)}
+.config-actions{display:flex;gap:10px;flex-wrap:wrap}
+.danger-zone{border:1px solid rgba(248,113,113,0.25);border-radius:var(--radius-sm);padding:16px;background:rgba(248,113,113,0.04)}
+input[type=file]{display:none}
+
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--surface-2);border:1px solid var(--border);color:var(--text);
+  padding:12px 20px;border-radius:10px;font-size:13.5px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,0.4);
+  opacity:0;pointer-events:none;transition:opacity 0.25s ease, transform 0.25s ease;z-index:500;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+footer.app-footer{text-align:center;font-size:12px;color:var(--text-faint);padding-top:8px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="app-header">
+    <div class="app-title">
+      <h1>Sorteio Justo da Feira</h1>
+      <p id="todayLabel">—</p>
+    </div>
+    <div class="header-meta">
+      <span class="pill accent" id="cycleLabel">Ciclo #1</span>
+      <span class="pill" id="totalLabel">0 membros</span>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-top">
+      <h2>Sorteio de Hoje</h2>
+      <button class="btn btn-primary" id="drawBtn">🎲 Sortear Hoje</button>
+    </div>
+
+    <div id="bannerSlot"></div>
+
+    <div class="cards-row">
+      <div class="name-card" id="cardA">
+        <span class="label">Selecionado 1</span>
+        <span class="name" id="nameA">—</span>
+      </div>
+      <div class="name-card" id="cardB">
+        <span class="label">Selecionado 2</span>
+        <span class="name" id="nameB">—</span>
+      </div>
+    </div>
+
+    <div class="hero-actions" id="pendingActions" style="display:none">
+      <button class="btn btn-primary" id="confirmBtn">✓ Confirmar e Salvar</button>
+      <button class="btn btn-secondary" id="discardBtn">Descartar</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>Lista de Membros</h2>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="count" id="rosterCount">0 membros</span>
+        <button class="btn btn-secondary btn-sm" id="addMemberBtn">+ Adicionar</button>
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Status</th>
+            <th>Dias sem sortear</th>
+            <th>Vezes sorteado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="rosterBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section">
+    <details class="drawer" id="configDrawer">
+      <summary>⚙️ Configurações</summary>
+      <div class="drawer-body">
+
+        <div class="config-block">
+          <h3>Editar Membros</h3>
+          <p class="hint">Um nome por linha. Ao salvar, membros que já existem mantêm seu histórico; nomes novos entram com histórico zerado; nomes removidos perdem seus dados.</p>
+          <textarea id="membersTextarea" spellcheck="false"></textarea>
+          <div class="config-actions">
+            <button class="btn btn-primary btn-sm" id="saveMembersBtn">Salvar Lista de Membros</button>
+          </div>
+        </div>
+
+        <div class="config-block">
+          <h3>Backup</h3>
+          <div class="config-actions">
+            <button class="btn btn-secondary btn-sm" id="exportBtn">⭳ Exportar Dados</button>
+            <button class="btn btn-secondary btn-sm" id="importBtn">⭱ Importar Dados</button>
+            <input type="file" id="importFile" accept="application/json">
+          </div>
+        </div>
+
+        <div class="config-block danger-zone">
+          <h3 style="color:var(--danger)">Zona de Risco</h3>
+          <p class="hint">Apaga todo o histórico de sorteios, contadores e o ciclo atual. Os nomes dos membros são mantidos.</p>
+          <div class="config-actions">
+            <button class="btn btn-danger btn-sm" id="resetBtn">Zerar Histórico</button>
+          </div>
+        </div>
+
+      </div>
+    </details>
+  </section>
+
+  <footer class="app-footer">Dados salvos apenas neste navegador (localStorage).</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  'use strict';
+
+  var STORAGE_KEY = 'feira-sorteio-state-v1';
+  var INACTIVITY_WARN_DAYS = 21;
+
+  var DEFAULT_NAMES = Array.from({length:29}, function(_, i){
+    return 'Membro ' + String(i + 1).padStart(2, '0');
+  });
+
+  // ---------- date helpers ----------
+  function todayISO(){
+    var d = new Date();
+    var y = d.getFullYear();
+    var m = String(d.getMonth() + 1).padStart(2, '0');
+    var day = String(d.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + day;
+  }
+  function daysBetween(isoA, isoB){
+    var a = new Date(isoA + 'T00:00:00');
+    var b = new Date(isoB + 'T00:00:00');
+    return Math.round((b - a) / 86400000);
+  }
+  function uid(){
+    return 'm_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 9);
+  }
+
+  // ---------- state ----------
+  function freshMember(name){
+    return { id: uid(), name: name, timesDrawn: 0, lastDrawnDate: null, drawnInCycle: false };
+  }
+  function defaultState(){
+    return {
+      members: DEFAULT_NAMES.map(freshMember),
+      cycle: 1,
+      pending: null,           // { ids: [id, id] }
+      lastConfirmedDate: null, // ISO date of most recent confirmed draw
+      history: []              // [{ id, date, memberIds, snapshotMembers, snapshotCycle }]
+    };
+  }
+  function loadState(){
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return defaultState();
+      var parsed = JSON.parse(raw);
+      if (!parsed || !Array.isArray(parsed.members)) return defaultState();
+      return parsed;
+    } catch (e) {
+      console.error('Falha ao carregar estado salvo, iniciando do zero.', e);
+      return defaultState();
+    }
+  }
+  function saveState(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  var state = loadState();
+
+  // ---------- fairness engine ----------
+  function fisherYatesShuffle(arr){
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
+
+  function memberDaysInactive(member, today){
+    if (!member.lastDrawnDate) return null;
+    return daysBetween(member.lastDrawnDate, today);
+  }
+
+  // Returns exactly 2 member ids to draw today, respecting the tier system.
+  function selectDrawCandidates(){
+    var today = todayISO();
+    var tier1 = state.members.filter(function(m){ return !m.drawnInCycle; });
+
+    if (tier1.length >= 2) {
+      return fisherYatesShuffle(tier1).slice(0, 2).map(function(m){ return m.id; });
+    }
+
+    // Tier 1 has 0 or 1 candidates: take what's available, fill the rest from
+    // Tier 2, ranked by longest inactivity (ties broken by shuffle).
+    var picks = tier1.slice();
+    var needed = 2 - picks.length;
+    var tier2Pool = state.members.filter(function(m){ return m.drawnInCycle; });
+
+    var ranked = fisherYatesShuffle(tier2Pool).map(function(m){
+      return { m: m, d: memberDaysInactive(m, today) || 0 };
+    });
+    ranked.sort(function(a, b){ return b.d - a.d; }); // stable: shuffle preserved within ties
+
+    for (var i = 0; i < needed && i < ranked.length; i++) {
+      picks.push(ranked[i].m);
+    }
+    return picks.map(function(m){ return m.id; });
+  }
+
+  function performDraw(){
+    if (state.members.length < 2) {
+      showToast('É preciso ao menos 2 membros cadastrados.');
+      return;
+    }
+    var ids = selectDrawCandidates();
+    state.pending = { ids: ids };
+    saveState();
+    render();
+  }
+
+  function confirmDraw(){
+    if (!state.pending) return;
+    var today = todayISO();
+
+    // Snapshot for a safe undo via "Refazer Sorteio de Hoje".
+    var snapshotMembers = JSON.parse(JSON.stringify(state.members));
+    var snapshotCycle = state.cycle;
+
+    var idSet = state.pending.ids;
+    state.members.forEach(function(m){
+      if (idSet.indexOf(m.id) !== -1) {
+        m.timesDrawn += 1;
+        m.lastDrawnDate = today;
+        m.drawnInCycle = true;
+      }
+    });
+
+    var allDrawnThisCycle = state.members.every(function(m){ return m.drawnInCycle; });
+    if (allDrawnThisCycle) {
+      state.members.forEach(function(m){ m.drawnInCycle = false; });
+      state.cycle += 1;
+    }
+
+    state.history.push({
+      id: uid(),
+      date: today,
+      memberIds: idSet,
+      snapshotMembers: snapshotMembers,
+      snapshotCycle: snapshotCycle
+    });
+    state.lastConfirmedDate = today;
+    state.pending = null;
+
+    saveState();
+    render();
+    showToast('Sorteio de hoje confirmado e salvo.');
+  }
+
+  function discardDraw(){
+    state.pending = null;
+    saveState();
+    render();
+  }
+
+  function redoTodayDraw(){
+    var today = todayISO();
+    var idx = -1;
+    for (var i = state.history.length - 1; i >= 0; i--) {
+      if (state.history[i].date === today) { idx = i; break; }
+    }
+    if (idx === -1) {
+      showToast('Nenhum sorteio confirmado hoje para refazer.');
+      return;
+    }
+    if (!confirm('Isso vai desfazer o sorteio já confirmado de hoje (revertendo contadores) e sortear novamente. Continuar?')) return;
+
+    var entry = state.history[idx];
+    state.members = entry.snapshotMembers;
+    state.cycle = entry.snapshotCycle;
+    state.history.splice(idx, 1);
+
+    var stillConfirmedToday = state.history.some(function(h){ return h.date === today; });
+    state.lastConfirmedDate = stillConfirmedToday ? today : null;
+    state.pending = null;
+
+    saveState();
+    performDraw();
+    showToast('Sorteio de hoje refeito.');
+  }
+
+  // ---------- roster editing ----------
+  function addMember(){
+    var name = prompt('Nome do novo membro:');
+    if (name === null) return;
+    name = name.trim();
+    if (!name) return;
+    state.members.push(freshMember(name));
+    saveState();
+    render();
+    showToast('Membro adicionado.');
+  }
+
+  function removeMember(id){
+    var member = state.members.find(function(m){ return m.id === id; });
+    if (!member) return;
+    if (!confirm('Remover "' + member.name + '" e todo o histórico dele(a)?')) return;
+    state.members = state.members.filter(function(m){ return m.id !== id; });
+    if (state.pending) {
+      state.pending.ids = state.pending.ids.filter(function(pid){ return pid !== id; });
+      if (state.pending.ids.length < 2) state.pending = null;
+    }
+    saveState();
+    render();
+  }
+
+  function saveMembersFromTextarea(){
+    var lines = document.getElementById('membersTextarea').value
+      .split('\n')
+      .map(function(s){ return s.trim(); })
+      .filter(function(s){ return s.length > 0; });
+
+    if (lines.length === 0) {
+      showToast('A lista não pode ficar vazia.');
+      return;
+    }
+
+    var existingByName = {};
+    state.members.forEach(function(m){ existingByName[m.name] = m; });
+
+    var seen = {};
+    var newMembers = lines.map(function(name){
+      // Guard against duplicate lines colliding on the same existing member.
+      if (existingByName[name] && !seen[name]) {
+        seen[name] = true;
+        return existingByName[name];
+      }
+      return freshMember(name);
+    });
+
+    var removedCount = state.members.filter(function(m){ return lines.indexOf(m.name) === -1; }).length;
+    if (removedCount > 0 && !confirm(removedCount + ' membro(s) removido(s) da lista perderão seu histórico. Continuar?')) {
+      return;
+    }
+
+    var keptIds = newMembers.map(function(m){ return m.id; });
+    state.members = newMembers;
+    if (state.pending) {
+      state.pending.ids = state.pending.ids.filter(function(id){ return keptIds.indexOf(id) !== -1; });
+      if (state.pending.ids.length < 2) state.pending = null;
+    }
+
+    saveState();
+    render();
+    showToast('Lista de membros atualizada.');
+  }
+
+  function resetHistory(){
+    if (!confirm('Isso vai zerar TODOS os contadores, datas e o ciclo atual. Os nomes dos membros serão mantidos. Tem certeza?')) return;
+    state.members.forEach(function(m){
+      m.timesDrawn = 0;
+      m.lastDrawnDate = null;
+      m.drawnInCycle = false;
+    });
+    state.cycle = 1;
+    state.pending = null;
+    state.lastConfirmedDate = null;
+    state.history = [];
+    saveState();
+    render();
+    showToast('Histórico zerado.');
+  }
+
+  function exportData(){
+    var blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'sorteio-feira-backup-' + todayISO() + '.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function importData(file){
+    var reader = new FileReader();
+    reader.onload = function(){
+      try {
+        var parsed = JSON.parse(reader.result);
+        if (!parsed || !Array.isArray(parsed.members)) throw new Error('Formato inválido');
+        if (!confirm('Importar estes dados vai substituir TODOS os dados atuais. Continuar?')) return;
+        state = parsed;
+        saveState();
+        render();
+        showToast('Dados importados com sucesso.');
+      } catch (e) {
+        alert('Não foi possível importar o arquivo: ' + e.message);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // ---------- rendering ----------
+  var toastTimer = null;
+  function showToast(msg){
+    var el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 2600);
+  }
+
+  function memberById(id){
+    return state.members.find(function(m){ return m.id === id; });
+  }
+
+  function render(){
+    var today = todayISO();
+
+    document.getElementById('todayLabel').textContent =
+      new Date(today + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('cycleLabel').textContent = 'Ciclo #' + state.cycle;
+    document.getElementById('totalLabel').textContent = state.members.length + ' membro' + (state.members.length === 1 ? '' : 's');
+    document.getElementById('rosterCount').textContent = state.members.length + ' membro' + (state.members.length === 1 ? '' : 's');
+
+    var confirmedToday = state.lastConfirmedDate === today;
+    var pending = state.pending;
+
+    // ---- hero cards ----
+    var cardA = document.getElementById('cardA');
+    var cardB = document.getElementById('cardB');
+    var nameA = document.getElementById('nameA');
+    var nameB = document.getElementById('nameB');
+    var displayIds = pending ? pending.ids : (confirmedToday ? (state.history[state.history.length - 1].memberIds) : []);
+
+    [ [cardA, nameA, displayIds[0]], [cardB, nameB, displayIds[1]] ].forEach(function(pair){
+      var card = pair[0], nameEl = pair[1], id = pair[2];
+      var member = id ? memberById(id) : null;
+      card.classList.remove('filled', 'confirmed');
+      if (member) {
+        nameEl.textContent = member.name;
+        card.classList.add('filled');
+        if (confirmedToday && !pending) card.classList.add('confirmed');
+      } else {
+        nameEl.textContent = '—';
+      }
+    });
+
+    // ---- banner + action buttons ----
+    var bannerSlot = document.getElementById('bannerSlot');
+    var drawBtn = document.getElementById('drawBtn');
+    var pendingActions = document.getElementById('pendingActions');
+
+    bannerSlot.innerHTML = '';
+    pendingActions.style.display = 'none';
+    drawBtn.style.display = 'inline-flex';
+    drawBtn.disabled = false;
+
+    if (pending) {
+      drawBtn.disabled = true;
+      pendingActions.style.display = 'flex';
+      var b = document.createElement('div');
+      b.className = 'banner';
+      b.innerHTML = '<p>Sorteio pendente de confirmação. Revise os nomes acima e confirme para salvar.</p>';
+      bannerSlot.appendChild(b);
+    } else if (confirmedToday) {
+      drawBtn.style.display = 'none';
+      var lastEntry = state.history[state.history.length - 1];
+      var mA = memberById(lastEntry.memberIds[0]);
+      var mB = memberById(lastEntry.memberIds[1]);
+      var namesTxt = [mA, mB].filter(Boolean).map(function(m){ return m.name; }).join(' & ');
+      var d = document.createElement('div');
+      d.className = 'banner done';
+      d.innerHTML =
+        '<p>✓ Sorteio de hoje concluído: <strong>' + escapeHtml(namesTxt) + '</strong></p>' +
+        '<button class="btn btn-warn btn-sm" id="redoBtn">↺ Refazer Sorteio de Hoje</button>';
+      bannerSlot.appendChild(d);
+      document.getElementById('redoBtn').addEventListener('click', redoTodayDraw);
+    }
+
+    // ---- roster table ----
+    var rows = state.members.map(function(m){
+      var days = memberDaysInactive(m, today);
+      var status, statusClass;
+      if (pending && pending.ids.indexOf(m.id) !== -1) {
+        status = 'Pendente'; statusClass = 'status-pendente';
+      } else if (confirmedToday && m.lastDrawnDate === today) {
+        status = 'Sorteado'; statusClass = 'status-sorteado';
+      } else {
+        status = 'Aguardando'; statusClass = 'status-aguardando';
+      }
+      return { m: m, days: days, status: status, statusClass: statusClass };
+    });
+
+    rows.sort(function(a, b){
+      var da = a.days === null ? Infinity : a.days;
+      var db = b.days === null ? Infinity : b.days;
+      if (da !== db) return db - da;
+      return a.m.name.localeCompare(b.m.name, 'pt-BR');
+    });
+
+    var body = document.getElementById('rosterBody');
+    body.innerHTML = '';
+    rows.forEach(function(row){
+      var tr = document.createElement('tr');
+
+      var daysCellHtml;
+      if (row.days === null) {
+        daysCellHtml = '<span class="badge never">Nunca sorteado</span>';
+      } else if (row.days >= INACTIVITY_WARN_DAYS) {
+        daysCellHtml = '<span class="badge inactive-warn">⚠ ' + row.days + ' dias</span>';
+      } else {
+        daysCellHtml = row.days + ' dias';
+      }
+
+      tr.innerHTML =
+        '<td class="member-name">' + escapeHtml(row.m.name) + '</td>' +
+        '<td><span class="badge ' + row.statusClass + '">' + row.status + '</span></td>' +
+        '<td><div class="days-cell">' + daysCellHtml + '</div></td>' +
+        '<td>' + row.m.timesDrawn + '</td>' +
+        '<td><button class="remove-btn" data-id="' + row.m.id + '" title="Remover membro">✕</button></td>';
+      body.appendChild(tr);
+    });
+
+    body.querySelectorAll('.remove-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){ removeMember(btn.getAttribute('data-id')); });
+    });
+
+    // ---- config textarea (only refresh if not focused, to avoid clobbering edits) ----
+    var textarea = document.getElementById('membersTextarea');
+    if (document.activeElement !== textarea) {
+      textarea.value = state.members.map(function(m){ return m.name; }).join('\n');
+    }
+  }
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, function(c){
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  // ---------- wiring ----------
+  document.getElementById('drawBtn').addEventListener('click', performDraw);
+  document.getElementById('confirmBtn').addEventListener('click', confirmDraw);
+  document.getElementById('discardBtn').addEventListener('click', discardDraw);
+  document.getElementById('addMemberBtn').addEventListener('click', addMember);
+  document.getElementById('saveMembersBtn').addEventListener('click', saveMembersFromTextarea);
+  document.getElementById('resetBtn').addEventListener('click', resetHistory);
+  document.getElementById('exportBtn').addEventListener('click', exportData);
+  document.getElementById('importBtn').addEventListener('click', function(){
+    document.getElementById('importFile').click();
+  });
+  document.getElementById('importFile').addEventListener('change', function(e){
+    var file = e.target.files[0];
+    if (file) importData(file);
+    e.target.value = '';
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
