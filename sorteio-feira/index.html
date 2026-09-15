@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sorteio Justo da Feira</title>
-<meta name="description" content="Sistema de sorteio diário e justo para rotação de 29 membros da feira, com persistência local.">
+<meta name="description" content="Sistema de sorteio diário e justo para rotação dos membros da feira, com persistência local.">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
@@ -286,9 +286,35 @@ footer.app-footer{text-align:center;font-size:12px;color:var(--text-faint);paddi
   var STORAGE_KEY = 'feira-sorteio-state-v1';
   var INACTIVITY_WARN_DAYS = 21;
 
-  var DEFAULT_NAMES = Array.from({length:29}, function(_, i){
-    return 'Membro ' + String(i + 1).padStart(2, '0');
-  });
+  var DEFAULT_NAMES = [
+    'Alexandre Cipriani',
+    'Ana Regina Foiatto Teykorski',
+    'Ângela Maria Barreiros',
+    'Beatriz da Costa Neves',
+    'Carlos Eduardo Moser Raizer',
+    'Dalberto Siqueira',
+    'Davi Fernando Ribeiro',
+    'Estela Ribeiro',
+    'Ewerton Monteiro',
+    'Felipe Da Silva Pereira Medeiros Graeff',
+    'Felipe Moser',
+    'Gissele Werner Lucindo',
+    'Grasieli Regina Felix',
+    'Gustavo Ferracciu Philippi',
+    'Gustavo Rebelo Montegutte',
+    'Jheisson de Lorenzi',
+    'José Roberto Zanetti',
+    'Júlia Hoffmann Gonze',
+    'Maria Aparecida Zecca',
+    'Mateus Garcias Silva',
+    'Matheus Alberto Werner Luz',
+    'Natália Macedo Jacobs',
+    'Palandra Barbosa da Silva Pereira',
+    'Rafael Simas',
+    'Roger Vedes',
+    'Sergio Moehleck dos Santos',
+    'Silvana Segalla Pegoraro'
+  ];
 
   // ---------- date helpers ----------
   function todayISO(){
